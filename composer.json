@@ -29,7 +29,7 @@
 	"predis/predis": "1.1.*@dev",
 	"itsgoingd/slim-services": "dev-master",
         "itsgoingd/slim-facades": "dev-master",
-        "cartalyst/sentry": "2.1.4",
+        "cartalyst/sentry": "2.1.5",
         "ircmaxell/password-compat": "dev-master",
 	"maxmind-db/reader": "1.*",
         "webpatser/laravel-uuid": "dev-master",
