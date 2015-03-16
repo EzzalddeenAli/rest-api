@@ -1,9 +1,9 @@
 # REST API
 
-> The Open DRadio REST API - [https://api.opendradio.org](https://api.opendradio.org/).
+> The Open DRadio REST API - [https://api.opendradio.org](https://opendradio.org/).
 
 [![Build Status: Linux](https://img.shields.io/travis/opendradio/rest-api.svg?branch=master&style=flat-square)](https://travis-ci.org/opendradio/rest-api)
-[![Dependency Status](https://img.shields.io/versioneye/d/opendradio/rest-api.svg?style=flat-square)](https://www.versioneye.com/php/opendradio:rest-api)
+[![Dependency Status](https://www.versioneye.com/user/projects/550649a366e561bb9b00011f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/550649a366e561bb9b00011f)
 [![Issues](https://img.shields.io/github/issues/opendradio/rest-api.svg?style=flat-square)](https://github.com/opendradio/rest-api/issues)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg?style=flat-square)
 
@@ -64,7 +64,7 @@ If the API encounters an error, the response will be:
 You can issue a `GET` request to the root endpoint to get all the endpoints that the API supports:
 
 ```sh
-$ curl https://api.opendradio.org/
+$ curl https://api.opendradio.org/v1/
 ```
 
 ### HTTP Protocols
@@ -93,17 +93,17 @@ The default date format for this API is [W3C](http://www.w3.org/TR/html-markup/d
 ```txt
 Y-m-d\TH:i:sP
 ```
-
+2015-03-06T11:04:08+01:00
 **Time Zone**
 
-The default time zone is `UTC+1` (Europe/Berlin), the location of Deutschlandradio headquarters.
+The default time zone is `UTC+1` (Europe/Berlin), since it is the location of Deutschlandradio headquarters.
 
 ### Pagination
 
-Requests that return multiple items will be paginated to 30 items by default. You can specify further pages with the `?page` parameter. Note that for technical reasons not all endpoints respect the `?per_page` parameter.
+Requests that return multiple items will be paginated to 30 items by default. You can specify further pages with the `?page` parameter. Note that for technical reasons not all endpoints respect the `?per_page` parameter, see [Geo Frequencies](#geo-frequencies) for example.
 
 ```sh
-GET /news/from/2015-08-15/to/2015-08-17?page=2&per_page=10
+$ curl 'https://api.opendradio.org/v1/news/from/2015-08-15/to/2015-08-17?page=2&per_page=10'
 ```
 
 ### Sorting
@@ -111,7 +111,7 @@ GET /news/from/2015-08-15/to/2015-08-17?page=2&per_page=10
 Requests that return multiple items can be sorted ascending `asc` or descending `desc` with the `?sort` parameter.
 
 ```sh
-GET /broadcasts/latest?sort=desc
+$ curl 'https://api.opendradio.org/v1/broadcasts/latest?sort=desc'
 ```
 
 ## REST Resources
@@ -165,12 +165,6 @@ GET /playlist
 }
 ```
 
-**Example**
-
-```sh
-GET /playlist?sort=desc&permanent=✓
-```
-
 ### Broadcasts
 
 #### List the latest broadcasts
@@ -211,16 +205,7 @@ GET /broadcasts/latest
 }
 ```
 
-**Example**
-
-```sh
-GET /broadcasts/latest?sort=desc&station=dlw
-```
-
 #### Get the broadcasts for a given date range
-
-> Note: The default date format for this API is [W3C](http://www.w3.org/TR/html-markup/datatypes.html#common.data.datetime) `Y-m-d\TH:i:s` (also known as `RFC3339`).  
-A JavaScript `Date` instance will parse this format right out of the box.
 
 ```sh
 GET /broadcasts/from/2015-08-15/to/2015-08-17
@@ -235,41 +220,10 @@ GET /broadcasts/from/2015-08-15/to/2015-08-17
 | `page`        | `number`      | Results will be limited to 30 items by default. You can specify further pages. Default: `1` |
 | `per_page`    | `number`      | Indicates how many items you want each page to return. Default: `30` |
 
-**Example**
-
-```sh
-GET /broadcasts/from/2015-08-15/to/2015-08-17?station=dlk&page=4&per_page=10
-```
-
-#### Get a single broadcast by its ObjectId
-
-> Note: [ObjectId](http://docs.mongodb.org/manual/reference/glossary/#term-objectid) is a 12-byte [BSON](http://docs.mongodb.org/manual/reference/glossary/#term-bson) type.
+#### Get a single broadcast by its id
 
 ```sh
 GET /broadcasts/id/4af9f23d8ead0e1d32000000
-```
-
-**Response**
-
-```json
-{
-  "success": true,
-  "message": "200 OK",
-  "data": {
-    "_id": "4af9f23d8ead0f1d32000000",
-    "title": "Lorem ipsum dolor sit amet",
-    "starts_at": "2015-08-15T15:35:00+01:00",
-    "type": "branchy",
-    "ends_at": "2015-08-15T16:00:00+01:00",
-    "duration": 1500,
-    "full_duration": 14100,
-    "part": 5,
-    "parent_id": "4af9f23d8ead0f1d31000000",
-    "description": "...",
-    "station_id": "4af9f23d8emd0e1d32000000",
-    "updated_at": "2015-08-15T15:52:01+01:00"
-  }
-}
 ```
 
 ### News
@@ -306,16 +260,7 @@ GET /news/latest
 }
 ```
 
-**Example**
-
-```sh
-GET /news/latest?sort=desc&station=dlk
-```
-
 #### Get the news for a given date range
-
-> Note: The default date format for this API is [W3C](http://www.w3.org/TR/html-markup/datatypes.html#common.data.datetime) `Y-m-d\TH:i:s` (also known as `RFC3339`).  
-A JavaScript `Date` instance will parse this format right out of the box.
 
 ```sh
 GET /news/from/2015-08-15/to/2015-08-17
@@ -330,35 +275,10 @@ GET /news/from/2015-08-15/to/2015-08-17
 | `page`        | `number`      | Results will be limited to 30 items by default. You can specify further pages. Default: `1` |
 | `per_page`    | `number`      | Indicates how many items you want each page to return. Default: `30` |
 
-
-**Example**
-
-```sh
-GET /news/from/2015-08-15/to/2015-08-17?station=dlk&page=4&per_page=10
-```
-
 #### Get a single news
-
-> Note: [ObjectId](http://docs.mongodb.org/manual/reference/glossary/#term-objectid) is a 12-byte [BSON](http://docs.mongodb.org/manual/reference/glossary/#term-bson) type.
 
 ```sh
 GET /news/id/4af9f23d8ead0e1d32000000
-```
-
-**Response**
-```json
-{
-  "success": true,
-  "message": "200 OK",
-  "data": {
-    "_id": "4af9f23d8ead0f1d32000000",
-    "title": "Lorem ipsum dolor sit amet",
-    "text": "...",
-    "publicated_at": "2015-08-15T15:52:01+01:00",
-    "station_id": "4af9f23d8emd0e1d32000000",
-    "updated_at": "2015-08-15T15:52:01+01:00"
-  }
-}
 ```
 
 ### Geo Frequencies
@@ -420,7 +340,7 @@ GET /geo-frequencies
 
 #### Geo clue the location of the request ip address
 
-> Note: A fallback service for the [Geolocation Web API Interface](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation). This filter uses [Maxmind GeoIP](https://www.maxmind.com/en/geoip2-services-and-databases) databases to determine the closest position.
+Note: A fallback service for the [Geolocation Web API Interface](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation). This filter uses [Maxmind GeoIP](https://www.maxmind.com/en/geoip2-services-and-databases) databases to determine the closest position.
 
 ```sh
 GET /geolocation
@@ -472,7 +392,7 @@ Installing [Composer](https://getcomposer.org/) is easy:
 1. Change to the top-level project directory.
 2. Install the dependencies:
 
-        $ php composer.phar update
+        $ composer update
 
 Your environment is now ready to work on the source.
 
@@ -500,6 +420,6 @@ All unit tests require PHP `>= 5.4`.
 
 ## License
 
-[Open DRadio](https://opendradio.org/) is an non-profit, open source project.
+[Open DRadio](https://opendradio.org/) is an non-profit, open source, community-driven project.
 
 This code is open-sourced software licensed under the [AGPL-3.0 license](http://www.gnu.org/licenses/agpl-3.0.html).
