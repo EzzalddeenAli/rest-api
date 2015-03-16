@@ -1,6 +1,6 @@
 # REST API
 
-> The Open DRadio REST API - [https://api.opendradio.org](https://opendradio.org/).
+> The Open DRadio REST API - [https://api.opendradio.org](https://api.opendradio.org/).
 
 [![Build Status: Linux](https://img.shields.io/travis/opendradio/rest-api.svg?branch=master&style=flat-square)](https://travis-ci.org/opendradio/rest-api)
 [![Dependency Status](https://img.shields.io/versioneye/d/opendradio/rest-api.svg?style=flat-square)](https://www.versioneye.com/php/opendradio:rest-api)
