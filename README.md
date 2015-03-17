@@ -1,6 +1,6 @@
 # REST API
 
-> The Open DRadio REST API - [https://api.opendradio.org](https://opendradio.org/).
+> The Open DRadio REST API - [https://api.opendradio.org](https://api.opendradio.org/).
 
 [![Build Status: Linux](https://img.shields.io/travis/opendradio/rest-api.svg?branch=master&style=flat-square)](https://travis-ci.org/opendradio/rest-api)
 [![Dependency Status](https://www.versioneye.com/user/projects/550649a366e561bb9b00011f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/550649a366e561bb9b00011f)
@@ -93,7 +93,7 @@ The default date format for this API is [W3C](http://www.w3.org/TR/html-markup/d
 ```txt
 Y-m-d\TH:i:sP
 ```
-2015-03-06T11:04:08+01:00
+
 **Time Zone**
 
 The default time zone is `UTC+1` (Europe/Berlin), since it is the location of Deutschlandradio headquarters.
