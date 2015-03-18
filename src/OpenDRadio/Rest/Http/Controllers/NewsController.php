@@ -47,7 +47,7 @@ class NewsController extends BaseController {
                 }
 
                 // This might be optimized.
-                $fromDate = new Carbon('-24 hour');
+                $fromDate = new Carbon('-8 hour');
 
                 // Check the station name parameter value
                 if (null != $stationName = Input::get('station'))
