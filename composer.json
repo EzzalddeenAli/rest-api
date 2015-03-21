@@ -19,7 +19,7 @@
         "php": ">=5.4.0",
         "ext-mongo": "*",
 	"ext-redis": "*",
-	"symfony/class-loader": "2.6.4",
+	"symfony/class-loader": "2.6.5",
 	"slim/slim": "2.6.*",
 	"illuminate/cache": "5.0.*",
 	"illuminate/database": "5.0.*",
