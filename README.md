@@ -4,8 +4,7 @@
 
 [![Build Status: Linux](https://img.shields.io/travis/opendradio/rest-api.svg?branch=master&style=flat-square)](https://travis-ci.org/opendradio/rest-api)
 [![Dependency Status](https://www.versioneye.com/user/projects/550649a366e561bb9b00011f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/550649a366e561bb9b00011f)
-[![Issues](https://img.shields.io/github/issues/opendradio/rest-api.svg?style=flat-square)](https://github.com/opendradio/rest-api/issues)
-![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg?style=flat-square)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0.html)
 
 ---
 
