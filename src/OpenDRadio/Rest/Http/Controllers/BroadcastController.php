@@ -67,6 +67,7 @@ class BroadcastController extends BaseController {
                                                         ->where('starts_at', '>=', $fromDate)
                                                         ->where('ends_at', '<=', $toDate)
                                                         ->orderBy('starts_at', $sort)
+                                                        ->take($this->limit)
                                                         ->get();
                         });
                 }
@@ -81,6 +82,7 @@ class BroadcastController extends BaseController {
                                                         ->where('starts_at', '>=', $fromDate)
                                                         ->where('ends_at', '<=', $toDate)
                                                         ->orderBy('starts_at', $sort)
+                                                        ->take($this->limit)
                                                         ->get();
                         });
                 }
@@ -144,7 +146,7 @@ class BroadcastController extends BaseController {
                 else
                 {
                         // Check if the value is larger than zero and not greater than the limit
-                        if ($perPage <= 0 || $perPage > 30)
+                        if ($perPage <= 0 || $perPage > $this->limit)
                         {
                                 Response::send(400, null, sprintf('Invalid per_page parameter. Value must be larger > [0] (min) and >= than [%d] (max)', $this->limit));
                         }

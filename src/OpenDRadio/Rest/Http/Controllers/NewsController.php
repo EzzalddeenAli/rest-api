@@ -26,7 +26,7 @@ class NewsController extends BaseController {
         protected $cacheDuration = 5;
 
         /**
-         * Get the latest news.
+         * Get the latest news by date.
          *
          * @return void
          */
@@ -63,9 +63,10 @@ class NewsController extends BaseController {
                         $models = Cache::remember($cacheKey, $this->cacheDuration, $fromDate, $toDate, $sort, function() use ($station, $fromDate, $sort)
                         {
                                 return NewsModel::where('enabled', true)->where('station_id', $station->getId())
-                                                    ->where('publicated_at', '>=', $fromDate)
-                                                    ->orderBy('starts_at', $sort)
-                                                    ->get();
+                                                        ->where('publicated_at', '>=', $fromDate)
+                                                        ->orderBy('starts_at', $sort)
+                                                        ->take($this->limit)
+                                                        ->get();
                         });
                 }
                 else
@@ -76,8 +77,9 @@ class NewsController extends BaseController {
                         $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $sort)
                         {
                                 return NewsModel::where('enabled', true)->where('publicated_at', '>=', $fromDate)
-                                                    ->orderBy('publicated_at', $sort)
-                                                    ->get();
+                                                        ->orderBy('publicated_at', $sort)
+                                                        ->take($this->limit)
+                                                        ->get();
                         });
                 }
                 
@@ -140,7 +142,7 @@ class NewsController extends BaseController {
                 else
                 {
                         // Check if the value is larger than zero and not greater than the limit
-                        if ($perPage <= 0 || $perPage > 30)
+                        if ($perPage <= 0 || $perPage > $this->limit)
                         {
                                 Response::send(400, null, sprintf('Invalid per_page parameter. Value must be larger > [0] (min) and >= than [%d] (max)', $this->limit));
                         }
@@ -180,12 +182,12 @@ class NewsController extends BaseController {
                         $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort, $skip, $perPage)
                         {
                                 return NewsModel::where('enabled', true)->where('station_id', $station->getId())
-                                                    ->where('publicated_at', '>=', $fromDate)
-                                                    ->where('publicated_at', '<=', $toDate)
-                                                    ->orderBy('publicated_at', $sort)
-                                                    ->skip($skip)
-                                                    ->take($perPage)
-                                                    ->get();
+                                                        ->where('publicated_at', '>=', $fromDate)
+                                                        ->where('publicated_at', '<=', $toDate)
+                                                        ->orderBy('publicated_at', $sort)
+                                                        ->skip($skip)
+                                                        ->take($perPage)
+                                                        ->get();
                         });
                 }
                 else
@@ -196,11 +198,11 @@ class NewsController extends BaseController {
                         $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $toDate, $sort, $skip, $perPage)
                         {
                                 return NewsModel::where('enabled', true)->where('publicated_at', '>=', $fromDate)
-                                                    ->where('publicated_at', '<=', $toDate)
-                                                    ->orderBy('publicated_at', $sort)
-                                                    ->skip($skip)
-                                                    ->take($perPage)
-                                                    ->get();
+                                                        ->where('publicated_at', '<=', $toDate)
+                                                        ->orderBy('publicated_at', $sort)
+                                                        ->skip($skip)
+                                                        ->take($perPage)
+                                                        ->get();
                         });
                 }
 
@@ -232,8 +234,8 @@ class NewsController extends BaseController {
                 $model = Cache::remember($cacheKey, $this->cacheDuration, function() use ($id)
                 {
                         return NewsModel::where('enabled', true)->where('_id', $id)
-                                            ->get()
-                                            ->first();
+                                                ->get()
+                                                ->first();
                 });
 
                 if (null === $model)
