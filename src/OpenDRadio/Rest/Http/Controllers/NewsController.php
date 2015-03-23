@@ -64,7 +64,7 @@ class NewsController extends BaseController {
                         {
                                 return NewsModel::where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('publicated_at', '>=', $fromDate)
-                                                        ->orderBy('starts_at', $sort)
+                                                        ->orderBy('publicated_at', $sort)
                                                         ->take($this->limit)
                                                         ->get();
                         });
