@@ -47,7 +47,7 @@ class BroadcastController extends BaseController {
                 }
 
                 // Create a simple date range. This might be optimized.
-                $fromDate = new Carbon('-3 hour');
+                $fromDate = new Carbon('-1 hour');
                 $toDate = new Carbon('+5 hour');
 
                 // Check the station name parameter value
@@ -79,7 +79,6 @@ class BroadcastController extends BaseController {
                         $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $toDate, $sort)
                         {
                                 return BroadcastModel::where('enabled', true)->where('starts_at', '>=', $fromDate)
-                                                        ->where('starts_at', '>=', $fromDate)
                                                         ->where('ends_at', '<=', $toDate)
                                                         ->orderBy('starts_at', $sort)
                                                         ->take($this->limit)
