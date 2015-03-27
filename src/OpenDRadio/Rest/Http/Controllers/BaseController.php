@@ -7,7 +7,7 @@ class BaseController {
          */
         public function __construct()
         {
-                // Todo: Implement the rate limiter
+                //
         }
 
 }
