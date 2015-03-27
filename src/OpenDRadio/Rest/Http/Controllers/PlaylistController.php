@@ -23,7 +23,7 @@ class PlaylistController extends BaseController {
         public function all()
         {
                 // Get the sort parameter value
-                if (null == $sort = strtolower(Input::get('sort')))
+                if (null === $sort = strtolower(Input::get('sort')))
                 {
                         $sort = 'asc';
                 }
@@ -37,7 +37,7 @@ class PlaylistController extends BaseController {
                 }
 
                 // Check the station name parameter value
-                if (null != $permanent = Input::get('permanent'))
+                if (null !== $permanent = Input::get('permanent'))
                 {
                         if ($permanent !== 'true' && $permanent !== '✓' && $permanent !== 'false')
                         {

@@ -28,7 +28,7 @@ App::notFound(function() {
 |
 */
 
-App::error(function (\Exception $e) use ($app) {
+App::error(function (\Exception $e) {
 
     Response::send(500);
 });

@@ -10,6 +10,7 @@
  | for an application.
  |
  */
+
 Route::conditions(array(
     '_id' => '[0-9a-fA-F]{24}',
     'start' => '(19|20)\d\d[\-\/.](0[1-9]|1[012])[\-\/.](0[1-9]|[12][0-9]|3[01])',
@@ -29,7 +30,6 @@ Route::conditions(array(
  |
  */
 
-// v1 API routes
 Route::group('/v1', function () {
 
     // Playlist
@@ -64,24 +64,6 @@ Route::group('/v1', function () {
         // Get all resources
         Route::get('/', 'OpenDRadio\Rest\Http\Controllers\GeoFrequencyController:all')->name('geo_frequencies_url');
     });
-
-    //Route::group('/device', function () {
-    //
-    //    // Create a resource
-    //    Route::post('/', 'OpenDRadio\Rest\Http\Controllers\DeviceController:create');
-    //
-    //    // Update a resource by token
-    //    Route::patch('/token/:token', 'OpenDRadio\Rest\Http\Controllers\DeviceController:update');
-    //
-    ////    // Delete a resource by token
-    ////    Route::delete('/token/:token', 'OpenDRadio\Rest\Http\Controllers\DeviceController:delete');
-    ////});
-    //
-    //Route::group('/notification', function () {
-    //
-    //    // Get one resource by token and version
-    //    Route::get('/token/:token/version/:version', 'OpenDRadio\Rest\Http\Controllers\PushNotificationController:get');
-    //});
 
     // Geolocation service
     Route::get('/geolocation', 'OpenDRadio\Rest\Http\Controllers\GeolocationController:geoClue')->name('geo_clue_url');

@@ -4,8 +4,6 @@ use Carbon;
 use Request;
 use Response;
 use MaxMind\Db\Reader;
-use OpenDRadio\Radio\Models\BroadcastModel;
-use OpenDRadio\Radio\Models\StationModel;
 
 class GeolocationController extends BaseController {
 
@@ -34,7 +32,7 @@ class GeolocationController extends BaseController {
 		$response = [
 			'timestamp' => $now->timestamp,
 			'coords' => $record['location']
-		);
+		];
 
 		$response['coords']['altitude'] = 0;
 
