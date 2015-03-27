@@ -34,7 +34,7 @@ class GeolocationController extends BaseController {
 		$response = [
 			'timestamp' => $now->timestamp,
 			'coords' => $record['location']
-		);
+		]];
 
 		$response['coords']['altitude'] = 0;
 

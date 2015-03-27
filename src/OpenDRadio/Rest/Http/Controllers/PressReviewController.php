@@ -195,7 +195,7 @@ class PressReviewController extends BaseController
     public function get($id)
     {
         // Validate the MongoId
-        if (false == \MongoId::isValid($id)) {
+        if (false === \MongoId::isValid($id)) {
             Response::send(400, null, 'Invalid id');
         }
 
