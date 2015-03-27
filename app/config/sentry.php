@@ -14,12 +14,12 @@
  * @package    Sentry
  * @version    2.0.0
  * @author     Cartalyst LLC
- * @license    BSD License (3-clause)
- * @copyright  (c) 2011 - 2013, Cartalyst LLC
+ * @license    BSD License (3-clause]
+ * @copyright  (c] 2011 - 2013, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-$config['sentry'] = array(
+$config['sentry'] = [
 
     /*
     |--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ $config['sentry'] = array(
     | This drivers manages the retrieval and authentication of the users
     | attempting to get access to protected areas of your application.
     |
-    | Supported: "eloquent" (more coming soon).
+    | Supported: "eloquent" (more coming soon].
     |
     */
 
@@ -58,7 +58,7 @@ $config['sentry'] = array(
     |
     */
 
-    'cookie' => array(
+    'cookie' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -73,7 +73,7 @@ $config['sentry'] = array(
 
         'key' => 'cartalyst_sentry',
 
-    ),
+    ],
     
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ $config['sentry'] = array(
     |
     */
 
-    'groups' => array(
+    'groups' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -98,7 +98,7 @@ $config['sentry'] = array(
 
         'model' => 'Cartalyst\Sentry\Groups\Eloquent\Group',
 
-    ),
+    ],
     
     /*
     |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ $config['sentry'] = array(
     |
     */
     
-    'users' => array(
+    'users' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -136,7 +136,7 @@ $config['sentry'] = array(
 
         'login_attribute' => 'email',
 
-    ),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -162,7 +162,7 @@ $config['sentry'] = array(
     |
     */
 
-    'throttling' => array(
+    'throttling' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -217,6 +217,6 @@ $config['sentry'] = array(
 
         'suspension_time' => 60,
 
-    ),
+    ],
 
-);
+];
