@@ -33,7 +33,7 @@ class BroadcastController extends BaseController {
         public function latest()
         {
                 // Get the sort parameter value
-                if (null === $sort = strtolower(Input::get('sort')))
+                if (null === $sort = Input::get('sort'))
                 {
                         $sort = 'asc';
                 }

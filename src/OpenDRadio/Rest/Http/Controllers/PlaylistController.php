@@ -23,7 +23,7 @@ class PlaylistController extends BaseController {
         public function all()
         {
                 // Get the sort parameter value
-                if (null === $sort = strtolower(Input::get('sort')))
+                if (null === $sort = Input::get('sort'))
                 {
                         $sort = 'asc';
                 }
