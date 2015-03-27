@@ -35,7 +35,7 @@ class PressReviewController extends BaseController
     public function latest()
     {
         // Get the sort parameter value
-        if (null == $sort = strtolower(Input::get('sort'))) {
+        if (null === $sort = strtolower(Input::get('sort'))) {
             $sort = 'asc';
         } else {
             // Validate the value
@@ -51,8 +51,8 @@ class PressReviewController extends BaseController
         $fromDate = new Carbon('-3 hour');
         
         // Check the station name parameter value
-        if (null != $stationName = Input::get('station')) {
-            if (null == $station = StationModel::where('name', $stationName)->where('enabled', true)->first()) {
+        if (null !== $stationName = Input::get('station')) {
+            if (null === $station = StationModel::where('name', $stationName)->where('enabled', true)->first()) {
                 Response::send(400, null, 'Invalid station parameter');
             }
             
@@ -93,7 +93,7 @@ class PressReviewController extends BaseController
     public function fromTo($start, $end)
     {
         // Get the sort parameter value
-        if (null == $sort = strtolower(Input::get('sort'))) {
+        if (null === $sort = strtolower(Input::get('sort'))) {
             $sort = 'asc';
         } else {
             // Validate the value
@@ -106,7 +106,7 @@ class PressReviewController extends BaseController
         }
         
         // Get the page parameter value
-        if (null == $page = strtolower(Input::get('page'))) {
+        if (null === $page = strtolower(Input::get('page'))) {
             $page = 0;
         } else {
             // Check if the value must be numeric intval
@@ -121,7 +121,7 @@ class PressReviewController extends BaseController
         }
         
         // Get the per page parameter value
-        if (null == $perPage = strtolower(Input::get('per_page'))) {
+        if (null === $perPage = strtolower(Input::get('per_page'))) {
             $perPage = $this->limit;
         } else {
             // Check if the value is larger than zero and not greater than the limit
@@ -131,12 +131,12 @@ class PressReviewController extends BaseController
         }
         
         // Convert the start date format
-        if (null == $fromDate = Carbon::createFromFormat('Y-m-d', $start)) {
+        if (null === $fromDate = Carbon::createFromFormat('Y-m-d', $start)) {
             Response::send(400, null, 'Failed to transform start date');
         }
         
         // Convert the end date format
-        if (null == $toDate = Carbon::createFromFormat('Y-m-d', $end)) {
+        if (null === $toDate = Carbon::createFromFormat('Y-m-d', $end)) {
             Response::send(400, null, 'Failed to transform end date');
         }
         
@@ -148,8 +148,8 @@ class PressReviewController extends BaseController
         $skip = (($page > 0) ? $page * $perPage : 0);
         
         // Check the station name parameter value
-        if (null != $stationName = Input::get('station')) {
-            if (null == $station = StationModel::where('name', $stationName)->where('enabled', true)->first()) {
+        if (null !== $stationName = Input::get('station')) {
+            if (null === $station = StationModel::where('name', $stationName)->where('enabled', true)->first()) {
                 Response::send(400, null, 'Invalid station parameter');
             }
 

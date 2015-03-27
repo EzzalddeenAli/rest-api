@@ -23,7 +23,7 @@ class DeviceController extends BaseController {
 		    $token = Input::put('token');
 		}
 		
-		if (null == $token) {
+		if (null === $token) {
 		    Response::send(400, null, 'Invalid token');
 		}
 		
