@@ -1,7 +1,6 @@
 <?php namespace OpenDRadio\Rest\Http\Controllers;
 
 use Cache;
-use Input;
 use Response;
 use OpenDRadio\Radio\Models\GeoFrequencyModel;
 
