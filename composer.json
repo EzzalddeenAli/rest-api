@@ -1,5 +1,5 @@
 {
-    "name": "rest-api",
+    "name": "opendradio/rest-api",
     "type": "project",
     "description": "PHP REST API using Slim Framework, Eloquent ORM, MongoDB and Redis",
     "keywords": ["framework", "slim", "sentry", "eloquent", "mongodb", "mongo", "redis"],
