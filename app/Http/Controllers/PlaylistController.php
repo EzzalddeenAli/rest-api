@@ -33,7 +33,7 @@ class PlaylistController extends BaseController {
                 // Check the station name parameter value
                 if (null !== $permanent = Input::get('permanent'))
                 {
-                        $usePermanent = ($permanent === 'true' $permanent === 1 || $permanent === '✓' ? true : false);
+                        $usePermanent = ($permanent === 'true' || $permanent === 1 || $permanent === '✓' ? true : false);
 
                         // Create a cache key
                         $cacheKey = sprintf('playlist:permanent_%s:sort_%s', $boolean, $sort);
