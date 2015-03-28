@@ -1,7 +1,7 @@
 <?php namespace OpenDRadio\Rest\Http\Controllers;
 
 use Cache;
-use Input;
+use Request;
 use Response;
 use OpenDRadio\Radio\Models\StationModel;
 
@@ -28,10 +28,10 @@ class PlaylistController extends BaseController {
                 ]);
 
                 // Get the parameter
-                $sort = Input::get('sort') ?: 'asc';
+                $sort = Request::get('sort') ?: 'asc';
 
                 // Check the station name parameter value
-                if (null !== $permanent = Input::get('permanent'))
+                if (null !== $permanent = Request::get('permanent'))
                 {
                         $usePermanent = ($permanent === 'true' || $permanent === 1 || $permanent === '✓' ? true : false);
 
