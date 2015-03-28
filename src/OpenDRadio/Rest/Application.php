@@ -21,6 +21,13 @@ class Application {
          */
         protected $slim;
 
+	/**
+	 * The base path for the Slim installation.
+	 *
+	 * @var string
+	 */
+	protected $basePath;
+
         /**
          * The application configuration.
          *
@@ -34,14 +41,113 @@ class Application {
          *
          * @param array $config            
          */
-        public function __construct(array $config = array())
+        public function __construct($basePath)
         {
-                $this->slim = new Slim($config['slim']);
+                $this->setBasePath($basePath)->loadConfig();
+        }
 
-                // Set the default response headers
-                $this->slim->response()->header('Content-Type', 'application/json; charset=utf-8');
+	/**
+	 * Set the base path for the application.
+	 *
+	 * @param  string  $basePath
+	 * @return $this
+	 */
+	public function setBasePath($basePath)
+	{
+		$this->basePath = $basePath;
+		return $this;
+	}
 
-                $this->config = $config;
+	/**
+	 * Load the configuration.
+	 *
+	 * @return $this
+	 */
+        public function loadConfig()
+        {
+                foreach (glob($this->basePath.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'*.php') as $file)
+                {
+                        require $file;
+                }
+
+		foreach(['cache',  'cookies', 'database'] as $category)
+		{
+                        foreach($config[$category] as $key => $value)
+                        {
+                                $config['slim'][$category.'.'.$key] = $value;
+                        }
+
+                        unset($config[$category]);
+		}
+
+		$this->config = $config;
+
+                return $this;
+        }
+
+	/**
+	 * Bind all of the application paths in the container.
+	 *
+	 * @return void
+	 */
+	protected function bindPathsInContainer()
+	{
+		foreach (['base', 'lang', 'storage'] as $path)
+		{
+                        $this->slim->container['path.'.$path] = $this->{$path.'Path'}();
+		}
+	}
+
+	/**
+	 * Get the path to the application "app" directory.
+	 *
+	 * @return string
+	 */
+	public function path()
+	{
+		return $this->basePath.DIRECTORY_SEPARATOR.'app';
+	}
+
+	/**
+	 * Get the base path of the Laravel installation.
+	 *
+	 * @return string
+	 */
+	public function basePath()
+	{
+		return $this->basePath;
+	}
+
+	/**
+	 * Get the path to the language files.
+	 *
+	 * @return string
+	 */
+	public function langPath()
+	{
+		return $this->basePath.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'lang';
+	}
+
+	/**
+	 * Get the path to the storage directory.
+	 *
+	 * @return string
+	 */
+	public function storagePath()
+	{
+		return $this->basePath.DIRECTORY_SEPARATOR.'storage';
+	}
+
+        /**
+         * Boot up Slim PHP.
+         *
+         * @param array $config            
+         * @return void
+         */
+        public function bootSlim($config)
+        {
+                $this->slim = new Slim($config);
+		$this->bindPathsInContainer();
         }
 
         /**
@@ -65,6 +171,10 @@ class Application {
         public function bootProviders($config)
         {
                 $services = new ServiceManager($this->slim);
+
+                $services['path.lang'] = $this->slim->{'path.lang'};
+                $services['path.storage'] = $this->slim->{'path.storage'};
+
                 $services->registerServices($config);
         }
 
@@ -78,7 +188,7 @@ class Application {
         {
                 $slim = $this->slim;
 
-                $this->slim->container->singleton('sentry', function () use($slim, $config)
+                $this->slim->container->singleton('sentry', function() use($slim, $config)
                 {
                         $hasherProvider = $this->hasherProviderFactory();
                         $userProvider = $this->userProviderFactory($hasherProvider, $config);
@@ -253,6 +363,7 @@ class Application {
          */
         public function boot()
         {
+                $this->bootSlim($this->config['slim']);
                 $this->bootFacade($this->config['aliases']);
                 $this->bootProviders($this->config['providers']);
                 $this->bootSentry($this->config['sentry']);
