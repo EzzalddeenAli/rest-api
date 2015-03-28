@@ -1,4 +1,4 @@
-<?php namespace OpenDRadio\Rest\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use Cache;
 use Request;
