@@ -5,7 +5,6 @@ use Cache;
 use Carbon;
 use Request;
 use Response;
-use Validator;
 use OpenDRadio\Radio\Models\BroadcastModel;
 use OpenDRadio\Radio\Models\StationModel;
 
