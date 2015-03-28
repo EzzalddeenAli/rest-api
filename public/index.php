@@ -33,7 +33,19 @@ require __DIR__.'/../bootstrap/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/start.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';
+$app->boot();
+
+/*
+|--------------------------------------------------------------------------
+| Register the global handlers
+|--------------------------------------------------------------------------
+|
+| Slim can handle different types of handlers, let's use them.
+|
+*/
+
+require __DIR__.'/../bootstrap/global.php';
 
 /*
 |--------------------------------------------------------------------------
