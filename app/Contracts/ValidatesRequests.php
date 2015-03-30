@@ -15,6 +15,11 @@ trait ValidatesRequests {
 	 */
 	public function validate(array $data, array $rules, array $messages = array())
 	{
+                Validator::extend('mongo_id', function($attribute, $value, $parameters)
+                {
+			return true === \MongoId::isValid($value);
+                });
+
 		$validator = Validator::make($data, $rules, $messages);
 
 		if ($validator->fails())
