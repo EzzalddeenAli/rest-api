@@ -33,7 +33,8 @@ class NewsController extends BaseController {
         public function getLatest()
         {
                 $this->validate(Request::get(), [
-                    'sort' => 'string:value|in:asc,desc',
+                        'sort' => 'string:value|in:asc,desc',
+                        'station' => 'string:value|exists:stations,name',
                 ]);
 
                 // Get the parameter
@@ -45,15 +46,12 @@ class NewsController extends BaseController {
                 // Check the station name parameter value
                 if (null !== $stationName = Request::get('station'))
                 {
-                        if (null === $station = StationModel::where('name', $stationName)->where('enabled', true)->first())
-                        {
-                            Response::send(400, null, 'Invalid station parameter');
-                        }
+                        $station = StationModel::where('name', $stationName)->where('enabled', true)->first();
 
                         // Create a cache key
-                        $cacheKey = sprintf('news_latest:station_id_%s:sort_%s', $station->getId());
+                        $cacheKey = sprintf('news_latest:station_id_%s:sort_%s', $station->getId(), $sort);
 
-                        $models = Cache::remember($cacheKey, $this->cacheDuration, $fromDate, $toDate, $sort, function() use ($station, $fromDate, $sort)
+                        $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $sort)
                         {
                                 return NewsModel::where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('publicated_at', '>=', $fromDate)
@@ -75,7 +73,7 @@ class NewsController extends BaseController {
                                                         ->get();
                         });
                 }
-                
+
                 if ($models->isEmpty())
                 {
                         Response::send(200, [], '200 - OK, but 0 results found');
@@ -102,7 +100,8 @@ class NewsController extends BaseController {
                         'per_page' => sprintf('numeric:value|min:1|max:%d', $this->limit),
                         'start' => sprintf('date|date_format:"Y-m-d"|before:%s', $end),
                         'end' => sprintf('date|date_format:"Y-m-d"|after:%s', $start),
-		]);
+                        'station' => 'string:value|exists:stations,name',
+                ]);
 
                 // Get the parameters
                 $sort = Request::get('sort') ?: 'asc';
@@ -118,10 +117,7 @@ class NewsController extends BaseController {
                 // Check the station name parameter value
                 if (null !== $stationName = Request::get('station'))
                 {
-                        if (null === $station = StationModel::where('name', $stationName)->where('enabled', true)->first())
-                        {
-                                Response::send(400, null, 'Invalid station parameter');
-                        }
+                        $station = StationModel::where('name', $stationName)->where('enabled', true)->first();
 
                         // Create a cache key
                         $cacheKey = sprintf('news_range:station_id_%s:from_%d:to_%d:skip_%d:take_%d:sort_%s', $station->getId(), $fromDate->timestamp, $toDate->timestamp, $skip, $perPage, $sort);
@@ -169,14 +165,12 @@ class NewsController extends BaseController {
          */
         public function getOne($id)
         {
-                // Validate the MongoId
-                if (false === \MongoId::isValid($id))
-                {
-                        Response::send(400, null, 'Invalid id');
-                }
+                $this->validate(['id' => $id], [
+                        'id' => 'mongo_id:value|exists:news,_id',
+                ]);
 
                 // Create a cache key
-                $cacheKey = sprintf('news:id_%s', $id);
+                $cacheKey = sprintf('broadcast:id_%s', $id);
 
                 $model = Cache::remember($cacheKey, $this->cacheDuration, function() use ($id)
                 {
@@ -184,11 +178,6 @@ class NewsController extends BaseController {
                                                 ->get()
                                                 ->first();
                 });
-
-                if (null === $model)
-                {
-                        Response::send(404);
-                }
 
                 Response::send(200, $model);
         }

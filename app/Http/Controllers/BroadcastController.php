@@ -34,7 +34,8 @@ class BroadcastController extends BaseController {
         public function getLatest()
         {
                 $this->validate(Request::get(), [
-                    'sort' => 'string:value|in:asc,desc',
+                        'sort' => 'string:value|in:asc,desc',
+                        'station' => 'string:value|exists:stations,name',
                 ]);
 
                 // Get the parameter
@@ -47,15 +48,12 @@ class BroadcastController extends BaseController {
                 // Check the station name parameter value
                 if (null !== $stationName = Request::get('station'))
                 {
-                        if (null === $station = StationModel::where('name', $stationName)->where('enabled', true)->first())
-                        {
-                                Response::send(400, null, 'Invalid station parameter');
-                        }
+                        $station = StationModel::where('name', $stationName)->where('enabled', true)->first();
 
                         // Create a cache key
-                        $cacheKey = sprintf('broadcasts_latest:station_id_%s:sort_%s', $station->getId());
+                        $cacheKey = sprintf('broadcasts_latest:station_id_%s:sort_%s', $station->getId(), $sort);
 
-                        $models = Cache::remember($cacheKey, $this->cacheDuration, $fromDate, $toDate, $sort, function() use ($station, $fromDate, $toDate, $sort)
+                        $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort)
                         {
                                 return BroadcastModel::where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('starts_at', '>=', $fromDate)
@@ -106,7 +104,8 @@ class BroadcastController extends BaseController {
                         'per_page' => sprintf('numeric:value|min:1|max:%d', $this->limit),
                         'start' => sprintf('date|date_format:"Y-m-d"|before:%s', $end),
                         'end' => sprintf('date|date_format:"Y-m-d"|after:%s', $start),
-		]);
+                        'station' => 'string:value|exists:stations,name',
+                ]);
 
                 // Get the parameters
                 $sort = Request::get('sort') ?: 'asc';
@@ -122,10 +121,7 @@ class BroadcastController extends BaseController {
                 // Check the station name parameter value
                 if (null !== $stationName = Request::get('station'))
                 {
-                        if (null === $station = StationModel::where('name', $stationName)->where('enabled', true)->first())
-                        {
-                                Response::send(400, null, 'Invalid station parameter');
-                        }
+                        $station = StationModel::where('name', $stationName)->where('enabled', true)->first();
 
                         // Create a cache key
                         $cacheKey = sprintf('broadcasts_range:station_id_%s:from_%d:to_%d:skip_%d:take_%d:sort_%s', $station->getId(), $fromDate->timestamp, $toDate->timestamp, $skip, $perPage, $sort);
@@ -174,11 +170,9 @@ class BroadcastController extends BaseController {
          */
         public function getOne($id)
         {
-                // Validate the MongoId
-                if (false === \MongoId::isValid($id))
-                {
-                        Response::send(400, null, 'Invalid id');
-                }
+                $this->validate(['id' => $id], [
+                        'id' => 'mongo_id:value|exists:broadcasts,_id',
+                ]);
 
                 // Create a cache key
                 $cacheKey = sprintf('broadcast:id_%s', $id);
@@ -189,11 +183,6 @@ class BroadcastController extends BaseController {
                                                 ->get()
                                                 ->first();
                 });
-
-                if (null === $model)
-                {
-                        Response::send(404);
-                }
 
                 Response::send(200, $model);
         }
