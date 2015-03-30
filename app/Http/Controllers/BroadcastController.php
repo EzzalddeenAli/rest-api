@@ -5,6 +5,7 @@ use Cache;
 use Carbon;
 use Request;
 use Response;
+use Illuminate\Database\Eloquent\Collection;
 use OpenDRadio\Radio\Models\BroadcastModel;
 use OpenDRadio\Radio\Models\StationModel;
 
@@ -53,9 +54,9 @@ class BroadcastController extends BaseController {
                         // Create a cache key
                         $cacheKey = sprintf('broadcasts_latest:station_id_%s:sort_%s', $station->getId(), $sort);
 
-                        $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort)
+                        $collection = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort)
                         {
-                                return BroadcastModel::where('enabled', true)->where('station_id', $station->getId())
+                                return $station->getBroadcasts()->where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('starts_at', '>=', $fromDate)
                                                         ->where('ends_at', '<=', $toDate)
                                                         ->orderBy('starts_at', $sort)
@@ -68,22 +69,30 @@ class BroadcastController extends BaseController {
                         // Create a cache key
                         $cacheKey = sprintf('broadcasts_latest:sort_%s', $sort);
 
-                        $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $toDate, $sort)
+                        $collection = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $toDate, $sort)
                         {
-                                return BroadcastModel::where('enabled', true)->where('starts_at', '>=', $fromDate)
-                                                        ->where('ends_at', '<=', $toDate)
-                                                        ->orderBy('starts_at', $sort)
-                                                        ->take($this->limit)
-                                                        ->get();
+                                $collection = new Collection();
+
+                                StationModel::all()->each(function($station) use(&$collection, $fromDate, $toDate, $sort)
+                                {
+                                        $collection = $collection->merge($station->getBroadcasts()->where('enabled', true)->where('station_id', $station->getId())
+                                                                                ->where('starts_at', '>=', $fromDate)
+                                                                                ->where('ends_at', '<=', $toDate)
+                                                                                ->orderBy('starts_at', $sort)
+                                                                                ->take($this->limit)
+                                                                                ->get());
+                                });
+
+                                return $collection;
                         });
                 }
 
-                if ($models->isEmpty())
+                if ($collection->isEmpty())
                 {
                         Response::send(200, [], '200 - OK, but 0 results found');
                 }
                 
-                Response::send(200, $models);
+                Response::send(200, $collection);
         }
 
         /**
@@ -126,9 +135,9 @@ class BroadcastController extends BaseController {
                         // Create a cache key
                         $cacheKey = sprintf('broadcasts_range:station_id_%s:from_%d:to_%d:skip_%d:take_%d:sort_%s', $station->getId(), $fromDate->timestamp, $toDate->timestamp, $skip, $perPage, $sort);
 
-                        $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort, $skip, $perPage)
+                        $collection = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort, $skip, $perPage)
                         {
-                                return BroadcastModel::where('enabled', true)->where('station_id', $station->getId())
+                                return $station->getBroadcasts()->where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('starts_at', '>=', $fromDate)
                                                         ->where('ends_at', '<=', $toDate)
                                                         ->orderBy('starts_at', $sort)
@@ -142,7 +151,7 @@ class BroadcastController extends BaseController {
                         // Create a cache key
                         $cacheKey = sprintf('broadcasts_range:from_%d:to_%d:skip_%d:take_%d:sort_%s', $fromDate->timestamp, $toDate->timestamp, $skip, $perPage, $sort);
 
-                        $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $toDate, $sort, $skip, $perPage)
+                        $collection = Cache::remember($cacheKey, $this->cacheDuration, function() use ($fromDate, $toDate, $sort, $skip, $perPage)
                         {
                                 return BroadcastModel::where('enabled', true)->where('starts_at', '>=', $fromDate)
                                                         ->where('starts_at', '>=', $fromDate)
@@ -154,12 +163,12 @@ class BroadcastController extends BaseController {
                         });
                 }
 
-                if ($models->isEmpty())
+                if ($collection->isEmpty())
                 {
                         Response::send(200, [], '200 - OK, but 0 results found');
                 }
 
-                Response::send(200, $models);
+                Response::send(200, $collection);
         }
 
         /**

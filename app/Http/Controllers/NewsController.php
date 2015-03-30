@@ -53,7 +53,7 @@ class NewsController extends BaseController {
 
                         $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $sort)
                         {
-                                return NewsModel::where('enabled', true)->where('station_id', $station->getId())
+                                return $station->getNews()->where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('publicated_at', '>=', $fromDate)
                                                         ->orderBy('publicated_at', $sort)
                                                         ->take($this->limit)
@@ -124,7 +124,7 @@ class NewsController extends BaseController {
 
                         $models = Cache::remember($cacheKey, $this->cacheDuration, function() use ($station, $fromDate, $toDate, $sort, $skip, $perPage)
                         {
-                                return NewsModel::where('enabled', true)->where('station_id', $station->getId())
+                                return $station->getNews()->where('enabled', true)->where('station_id', $station->getId())
                                                         ->where('publicated_at', '>=', $fromDate)
                                                         ->where('publicated_at', '<=', $toDate)
                                                         ->orderBy('publicated_at', $sort)
