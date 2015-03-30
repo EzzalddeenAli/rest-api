@@ -54,6 +54,7 @@ return [
 		"string"  => "The :attribute parameter must be at least :min characters.",
 		"array"   => "The :attribute parameter must have at least :min items.",
 	],
+        "mongo_id"             => "The given :attribute is not a 12-byte BSON type.",
 	"not_in"               => "The given :attribute parameter is invalid.",
 	"numeric"              => "The :attribute parameter must be a number.",
 	"regex"                => "The :attribute parameter format is invalid.",
