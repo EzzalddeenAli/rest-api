@@ -30,7 +30,9 @@ Route::conditions(array(
  |
  */
 
-Route::group('/v1', function () {
+Route::group('/v1', function() {
+
+        App::response()->headers->set('X-OpenDRadio-Media-Type', 'opendradio.v1');
 
         // Playlist
         Route::get('/playlist', 'App\Http\Controllers\PlaylistController:getIndex')->name('playlist_url');
