@@ -20,17 +20,17 @@ class ResponseFacade extends Response {
                 /**
                  * @var \Slim\Slim $slim
                  */
-                $app = self::$slim;
+                $slim = self::$slim;
 
-                $app->response->setStatus($status);
+                $slim->response->setStatus($status);
 
                 // Response headers
-                $app->response->headers->set('Content-Type', 'application/json; charset=utf-8');
-                $app->response->headers->set('Access-Control-Allow-Methods', (!empty($allow) ? strtoupper(implode(',', $allow)) : 'GET, OPTIONS'));
+                $slim->response->headers->set('Content-Type', 'application/json; charset=utf-8');
+                $slim->response->headers->set('Access-Control-Allow-Methods', (!empty($allow) ? strtoupper(implode(',', $allow)) : 'GET, OPTIONS'));
 
-                if ($app->request()->isOptions())
+                if ($slim->request()->isOptions())
                 {
-                    $app->response();
+                    $slim->response();
                     return;
                 }
 
@@ -40,7 +40,7 @@ class ResponseFacade extends Response {
                 ];
 
                 // Append a message to the response or create one
-                $responseData['message'] = ($message !== '') ? $message : $app->response->getMessageForCode($status);
+                $responseData['message'] = ($message !== '') ? $message : $slim->response->getMessageForCode($status);
 
                 if ($data !== null)
                 {
@@ -49,9 +49,9 @@ class ResponseFacade extends Response {
 
                 $json = json_encode($responseData);
 
-                if ($app->response->isClientError() || $app->response->isServerError())
+                if ($slim->response->isClientError() || $slim->response->isServerError())
                 {    
-                        $app->halt($status, $json);
+                        $slim->halt($status, $json);
                 }
 
                 // Set the ETag
@@ -60,21 +60,21 @@ class ResponseFacade extends Response {
                 if (null === $data)
                 {
                         $now->setTime($now->format('H'), $now->format('i'), 0);
-                        $app->etag(md5($now->getTimestamp()));
+                        $slim->etag(md5($now->getTimestamp()));
                 }
                 else
                 {
-                        $app->etag(md5(serialize($json)));
+                        $slim->etag(md5(serialize($json)));
                 }
 
                 if ($lastModified instanceof Carbon)
                 {
-                        $app->lastModified($lastModified->getTimestamp());
+                        $slim->lastModified($lastModified->getTimestamp());
                 }
 
-                $app->response->setBody($json);
+                $slim->response->setBody($json);
 
-                $app->stop();
+                $slim->stop();
         }
 
 }
