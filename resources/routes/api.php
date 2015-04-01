@@ -15,7 +15,7 @@ Route::conditions(array(
         '_id' => '[0-9a-fA-F]{24}',
         'start' => '(19|20)\d\d[\-\/.](0[1-9]|1[012])[\-\/.](0[1-9]|[12][0-9]|3[01])',
         'end' => '(19|20)\d\d[\-\/.](0[1-9]|1[012])[\-\/.](0[1-9]|[12][0-9]|3[01])',
-        'token' => '[a-zA-Z0-9_-]{64,128}',
+        'token' => '[a-zA-Z0-9_-]{128,248}',
         'version' => '[0-9]{1,6}'
 ));
 
@@ -69,6 +69,24 @@ Route::group('/v1', function() {
 
         // Geolocation service
         Route::get('/geolocation', 'App\Http\Controllers\GeolocationController:getIndex')->name('geo_clue_url');
+
+        Route::group('/device', function () {
+
+            // Post a resource
+            Route::post('/register', 'App\Http\Controllers\DeviceController:postDevice');
+
+            // Patch a resource
+            Route::patch('/token/:token', 'App\Http\Controllers\DeviceController:patchDevice');
+
+            // Delete a resource
+            Route::delete('/token/:token', 'App\Http\Controllers\DeviceController:deleteDevice');
+        });
+
+        Route::group('/notification', function () {
+
+            // Get a resource
+            Route::get('/message/token/:token/version/:version', 'App\Http\Controllers\NotificationController:getMessage');
+        });
 });
 
 // Index page (home) route
