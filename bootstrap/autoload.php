@@ -4,9 +4,9 @@ require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoa
 require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/MapClassLoader.php';
 
-use Symfony\Component\ClassLoader\ApcClassLoader,
-    Symfony\Component\ClassLoader\UniversalClassLoader,
-    Symfony\Component\ClassLoader\MapClassLoader;
+use Symfony\Component\ClassLoader\ApcClassLoader;
+use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Symfony\Component\ClassLoader\MapClassLoader;
 
 $namespaces = include __DIR__.'/../vendor/composer/autoload_namespaces.php';
 
