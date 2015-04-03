@@ -14,7 +14,7 @@ trait ValidatesRequests {
 	 * @param  array  $messages
 	 * @return void
 	 */
-	public function validate(array $data, array $rules, array $messages = array(), $connection)
+	public function validate(array $data, array $rules, array $messages = array(), $connection = '')
 	{
                 Validator::extend('mongo_id', function($attribute, $value, $parameters)
                 {
@@ -23,7 +23,7 @@ trait ValidatesRequests {
 
 		$validator = Validator::make($data, $rules, $messages);
 		
-		if(null !== $connection)
+		if(!empty($connection))
 		{
 			$verifier = App::make('validation.presence');
 			$verifier->setConnection($connection);
