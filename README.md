@@ -63,7 +63,27 @@ If the API encounters an error, the response will be:
 You can issue a `GET` request to the root endpoint to get all the endpoints that the API supports:
 
 ```sh
-$ curl https://api.opendradio.org/v1/
+$ curl -i https://api.opendradio.org
+
+HTTP/1.1 200 OK
+Date: Sun, 29 Mar 2015 17:30:14 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+X-Opendradio-Media-Type: opendradio.v1
+Access-Control-Allow-Methods: GET, OPTIONS
+Etag: "4042543dd3e30bf66034a4dc9bead46c"
+Server: opendradio
+Strict-Transport-Security: max-age=631138519; always
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Content-Security-Policy: default-src 'none'
+Access-Control-Allow-Origin: *
+Cache-Control: max-age=0, private, must-revalidate
+
+[]
 ```
 
 ### HTTP Protocols
