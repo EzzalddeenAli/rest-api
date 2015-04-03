@@ -35,6 +35,15 @@ $config['database'] = [
                         'database' => 'dradio_data',
                 ],
 
+                'mongodb_system' => [
+                        'driver'   => 'mongodb',
+                        'host'     => 'localhost',
+                        'port'     => 27017,
+                        'username' => '',
+                        'password' => '',
+                        'database' => 'dradio_system',
+                ],
+
         ],
 
         /*
