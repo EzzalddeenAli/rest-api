@@ -21,12 +21,12 @@ class Application {
          */
         protected $slim;
 
-	/**
-	 * The base path for the Slim installation.
-	 *
-	 * @var string
-	 */
-	protected $basePath;
+		/**
+		 * The base path for the Slim installation.
+		 *
+		 * @var string
+		 */
+		protected $basePath;
 
         /**
          * The application configuration.
@@ -46,23 +46,23 @@ class Application {
                 $this->setBasePath($basePath)->loadConfig();
         }
 
-	/**
-	 * Set the base path for the application.
-	 *
-	 * @param  string  $basePath
-	 * @return $this
-	 */
-	public function setBasePath($basePath)
-	{
-		$this->basePath = $basePath;
-		return $this;
-	}
+		/**
+		 * Set the base path for the application.
+		 *
+		 * @param  string  $basePath
+		 * @return $this
+		 */
+		public function setBasePath($basePath)
+		{
+			$this->basePath = $basePath;
+			return $this;
+		}
 
-	/**
-	 * Load the configuration.
-	 *
-	 * @return $this
-	 */
+		/**
+		 * Load the configuration.
+		 *
+		 * @return $this
+		 */
         public function loadConfig()
         {
                 foreach (glob($this->basePath.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'*.php') as $file)
@@ -70,73 +70,73 @@ class Application {
                         require $file;
                 }
 
-		foreach(['cache',  'cookies', 'database'] as $category)
-		{
-                        foreach($config[$category] as $key => $value)
-                        {
-                                $config['slim'][$category.'.'.$key] = $value;
-                        }
+				foreach(['cache', 'cookies', 'database', 'messenger'] as $category)
+				{
+						foreach($config[$category] as $key => $value)
+						{
+								$config['slim'][$category.'.'.$key] = $value;
+						}
 
-                        unset($config[$category]);
-		}
+						unset($config[$category]);
+				}
 
-		$this->config = $config;
+				$this->config = $config;
 
                 return $this;
         }
 
-	/**
-	 * Bind all of the application paths in the container.
-	 *
-	 * @return void
-	 */
-	protected function bindPathsInContainer()
-	{
-		foreach (['base', 'lang', 'storage'] as $path)
+		/**
+		 * Bind all of the application paths in the container.
+		 *
+		 * @return void
+		 */
+		protected function bindPathsInContainer()
 		{
-                        $this->slim->container['path.'.$path] = $this->{$path.'Path'}();
+				foreach (['base', 'lang', 'storage'] as $path)
+				{
+						$this->slim->container['path.'.$path] = $this->{$path.'Path'}();
+				}
 		}
-	}
-
-	/**
-	 * Get the path to the application "app" directory.
-	 *
-	 * @return string
-	 */
-	public function path()
-	{
-		return $this->basePath.DIRECTORY_SEPARATOR.'app';
-	}
-
-	/**
-	 * Get the base path of the Laravel installation.
-	 *
-	 * @return string
-	 */
-	public function basePath()
-	{
-		return $this->basePath;
-	}
-
-	/**
-	 * Get the path to the language files.
-	 *
-	 * @return string
-	 */
-	public function langPath()
-	{
-		return $this->basePath.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'lang';
-	}
-
-	/**
-	 * Get the path to the storage directory.
-	 *
-	 * @return string
-	 */
-	public function storagePath()
-	{
-		return $this->basePath.DIRECTORY_SEPARATOR.'storage';
-	}
+	
+		/**
+		 * Get the path to the application "app" directory.
+		 *
+		 * @return string
+		 */
+		public function path()
+		{
+				return $this->basePath.DIRECTORY_SEPARATOR.'app';
+		}
+	
+		/**
+		 * Get the base path of the Laravel installation.
+		 *
+		 * @return string
+		 */
+		public function basePath()
+		{
+				return $this->basePath;
+		}
+	
+		/**
+		 * Get the path to the language files.
+		 *
+		 * @return string
+		 */
+		public function langPath()
+		{
+				return $this->basePath.DIRECTORY_SEPARATOR.'resources'.DIRECTORY_SEPARATOR.'lang';
+		}
+	
+		/**
+		 * Get the path to the storage directory.
+		 *
+		 * @return string
+		 */
+		public function storagePath()
+		{
+				return $this->basePath.DIRECTORY_SEPARATOR.'storage';
+		}
 
         /**
          * Boot up Slim PHP.
@@ -147,7 +147,7 @@ class Application {
         public function bootSlim($config)
         {
                 $this->slim = new Slim($config);
-		$this->bindPathsInContainer();
+				$this->bindPathsInContainer();
         }
 
         /**
