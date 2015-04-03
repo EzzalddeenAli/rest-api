@@ -10,7 +10,6 @@ class GeoFrequencyController extends BaseController {
          * The query results cache duration.
          *
          * @var \Number
-         * @access protected
          */
         protected $cacheDuration = 5;
 

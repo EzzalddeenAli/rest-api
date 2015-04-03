@@ -3,7 +3,7 @@
 use App\Contracts\ValidatesRequests;
 
 class BaseController {
-        
+
         use ValidatesRequests;
 
         /**

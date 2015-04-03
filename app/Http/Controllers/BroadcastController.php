@@ -15,7 +15,6 @@ class BroadcastController extends BaseController {
          * The query results limit.
          *
          * @var \Number
-         * @access protected
          */
         protected $limit = 30;
 
@@ -23,7 +22,6 @@ class BroadcastController extends BaseController {
          * The query results cache duration.
          *
          * @var \Number
-         * @access protected
          */
         protected $cacheDuration = 1;
 

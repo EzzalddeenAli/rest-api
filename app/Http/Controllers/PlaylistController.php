@@ -6,7 +6,7 @@ use Response;
 use OpenDRadio\Radio\Models\StationModel;
 
 class PlaylistController extends BaseController {
-    
+
         /**
          * The query results cache duration.
          *
@@ -23,8 +23,8 @@ class PlaylistController extends BaseController {
         public function getIndex()
         {
                 $this->validate(Request::get(), [
-                    'sort' => 'string:value|in:asc,desc',
-                    'permanent' => 'in:true,false,0,1,✓'
+                        'sort' => 'string:value|in:asc,desc',
+                        'permanent' => 'in:true,false,0,1,✓'
                 ]);
 
                 // Get the parameter
